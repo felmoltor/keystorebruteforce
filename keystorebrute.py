@@ -28,18 +28,25 @@ def print_pem(data, type):
     print "-----END %s-----" % type
 
 def dictionaryAttack(keystore,dictionary):
+    foundpwd=False
     df = open(dictionary,"r")
-    print "Brute forcing keystore file '%s'. Please wait..." % keystore
+    print colored("=======================================","blue")
+    print colored("Brute forcing keystore file '%s'" % keystore,"blue")
+    print colored("=======================================","blue")
     for passw in df.readlines():
         passw=passw.strip()
         try:
             ks = jks.KeyStore.load(keystore, passw)
             print colored(" + Valid password found! '%s'" % passw,"green")
             dumpPrivateKey(ks)
+            foundpwd=True
             break
         except Exception as e:
             if options.verbose:
                 print colored(" - Invalid password '%s'" % passw,"red")
+    if not foundpwd:
+        print colored(" A valid password couln't be found :-(","red")
+    print
 
 def dumpPrivateKey(ks):
     for pk in ks.private_keys:
