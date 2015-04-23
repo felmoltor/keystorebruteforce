@@ -15,7 +15,7 @@ from termcolor import colored
 def getoptions():
     usage = "usage: %prog [options] arg1 arg2"
     parser = OptionParser(usage=usage)
-    parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=True, help="Show password being tested [default: False]")
+    parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Show password being tested [default: False]")
     parser.add_option("-k", "--keystore",metavar="FILE",dest="keystore", help="Keystore to crack")
     parser.add_option("-K", "--keystore-list",metavar="FILE", dest="keystorefile", default=None, help="A file with a list of keystores to crack")
     parser.add_option("-d", "--dictionary", default="dictionary.txt",dest="dictionary",help="Dictionary to use in the brute force")
@@ -29,7 +29,7 @@ def print_pem(data, type):
 
 def dictionaryAttack(keystore,dictionary):
     df = open(dictionary,"r")
-    print "Brute forcing keystore file '%s'" % keystore
+    print "Brute forcing keystore file '%s'. Please wait..." % keystore
     for passw in df.readlines():
         passw=passw.strip()
         try:
@@ -38,7 +38,8 @@ def dictionaryAttack(keystore,dictionary):
             dumpPrivateKey(ks)
             break
         except Exception as e:
-            print colored(" - Invalid password '%s'" % passw,"red")
+            if options.verbose:
+                print colored(" - Invalid password '%s'" % passw,"red")
 
 def dumpPrivateKey(ks):
     for pk in ks.private_keys:
