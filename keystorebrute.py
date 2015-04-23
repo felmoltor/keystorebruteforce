@@ -39,9 +39,10 @@ def print_pem(data, type):
 def dictionaryAttack(keystore,dictionary):
     foundpwd=False
     df = open(dictionary,"r")
-    print colored("=======================================","blue")
-    print colored("Brute forcing keystore file '%s'" % keystore,"blue")
-    print colored("=======================================","blue")
+    msg="= Brute forcing keystore file '%s' =" % keystore
+    print colored("="*len(msg),"cyan")
+    print colored(msg,"cyan")
+    print colored("="*len(msg),"cyan")
     for passw in df.readlines():
         passw=passw.strip()
         try:
