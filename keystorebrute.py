@@ -10,7 +10,16 @@
 import sys, base64, textwrap
 import jks
 from optparse import OptionParser
-from termcolor import colored
+from termcolor import colored,cprint
+
+VERSION="1.0"
+
+def printBanner():
+    print colored("======================================","blue","on_white")
+    print colored("=      Keystore Brute Force v%s     =" % VERSION,"blue","on_white")
+    print colored("= Author: Felipe Molina (@felmoltor) =","blue","on_white")
+    print colored("======================================","blue","on_white")
+    print
 
 def getoptions():
     usage = "usage: %prog [options] arg1 arg2"
@@ -66,6 +75,7 @@ def dumpPrivateKey(ks):
 # = MAIN = #
 # ======== #
 
+printBanner()
 options = getoptions()
 
 if options.keystorefile is not None:
