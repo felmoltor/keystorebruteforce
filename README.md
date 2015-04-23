@@ -8,7 +8,7 @@ Required Libraries
 ------------------
 
 * termcolor (sudo pip install termcolor)
-* pyjks     (sudo pip install pyjks
+* pyjks     (sudo pip install pyjks)
 
 Google Dorks
 ------------
