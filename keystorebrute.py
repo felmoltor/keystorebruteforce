@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # Author: Felipe Molina de la Torre (@felmoltor)
 # Date: 04/2015
@@ -15,8 +16,16 @@ import sys, base64, textwrap
 import jks
 from optparse import OptionParser
 from termcolor import colored,cprint
+import time
 
 VERSION="1.1"
+
+def printPercent(prefix="Progress: ", iteration=0.0, total=100.0, decimals=1, length=100, suffix="Complete", fill='█'):
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    sys.stdout.write('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix))
+    sys.stdout.flush()
 
 def printBanner():
     print colored("======================================","blue","on_white")
@@ -43,13 +52,19 @@ def print_pem(data, type):
 
 def dictionaryAttack(keystore,dictionary):
     foundpwd=False
+    NotValidFile=False
     df = open(dictionary,"r")
     msg="= Brute forcing keystore file '%s' =" % keystore
     print colored("="*len(msg),"cyan")
     print colored(msg,"cyan")
     print colored("="*len(msg),"cyan")
-    for passw in df.readlines():
+    dictines = df.readlines()
+    npassw=len(dictines)
+    cpassw=0    
+    for passw in dictines:
+        cpassw+=1
         passw=passw.strip()
+        printPercent(iteration=cpassw, total=npassw, suffix="Testing %s" % passw)
         try:
             ks = jks.KeyStore.load(keystore, passw, try_decrypt_keys=True)
             sys.stdout.write("\n [+] Valid password found: ")
@@ -60,19 +75,28 @@ def dictionaryAttack(keystore,dictionary):
                 dumpKeyStore(ks)
             
         except jks.util.KeystoreSignatureException as e:
+            continue
+                
+        except jks.util.BadKeystoreFormatException as e:
+            print "\nError opening (%s): The file is not a Java Key Store. Skipping" % keystore
+            NotValidFile=True
+            break
+        
+        except UnicodeDecodeError as ue:
             if options.verbose:
-                sys.stdout.write("\r [-] Invalid password: ")
-                sys.stdout.write(colored("%s" % passw,"red"))
+                print "\nError. Tried password is not ASCII encoded. Skipping this password"
+        
         if foundpwd:
             break
-    if foundpwd == False:
-        print colored(" A valid password couln't be found :-(","red")
-    print 
+    if foundpwd == False and NotValidFile == False:
+        print colored("\n\nA valid password couln't be found :-(","red") 
 
 def dumpKeyStore(ks):
     
     print "********* BEGIN PRIVATE KEY *********"
     for kalias in ks.private_keys.keys():
+        sys.stdout.write(colored(" [i]", "grey"))
+        print " Private Key Entry Alias: %s\n" % kalias
         pk = ks.private_keys[kalias]
         if not pk.is_decrypted():
             pk.decrypt()
@@ -89,8 +113,10 @@ def dumpKeyStore(ks):
     print "********* END PRIVATE KEYS CERTIFICATES *********\n"
 
     print "********* BEGIN KEY STORE CERTIFICATES *********"
-    for c in ks.certs:
-        print "Certificate: %s" % c.alias
+    for cername in ks.certs:
+        c = ks.certs[cername]
+        sys.stdout.write(colored(" [i]", "grey"))
+        print " Certificate name: %s\n" % cername
         print_pem(c.cert, "CERTIFICATE")
         print  
     print "********* END KEY STORE CERTIFICATES *********\n"
