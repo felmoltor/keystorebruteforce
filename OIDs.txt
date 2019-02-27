@@ -1,0 +1,211 @@
+1 2 840 113549 1 11	 	pkcs-11
+1 2 840 113549 1 12	 	pkcs-12
+
+1 2 840 113549 1 1	 	 pkcs-1
+1 2 840 113549 1 1 1	 rsaEncryption
+1 2 840 113549 1 1 2	 md2withRSAEncryption
+1 2 840 113549 1 1 4	 md5withRSAEncryption
+1 2 840 113549 1 1 5	 sha1WithRSAEncryption
+
+1 2 840 113549 1 9		pkcs-9
+1 2 840 113549 1 9 1    emailAddress
+1 2 840 113549 1 9 2    unstructuredName
+1 2 840 113549 1 9 3    contentType
+1 2 840 113549 1 9 4    messageDigest
+1 2 840 113549 1 9 5    signingTime
+1 2 840 113549 1 9 6    countersignature
+1 2 840 113549 1 9 7    challengePassword
+1 2 840 113549 1 9 8    unstructuredAddress
+1 2 840 113549 1 9 9    extendedCertificateAttributes
+
+1 2 840 113549 1 3       pkcs-3
+1 2 840 113549 1 3 1     dhKeyAgreement
+
+1 2 840 113549 1 7	 	 pkcs-7
+1 2 840 113549 1 7 1	 data
+1 2 840 113549 1 7 2	 signedData
+1 2 840 113549 1 7 3	 envelopedData
+1 2 840 113549 1 7 4	 signedAndEnvelopedData
+1 2 840 113549 1 7 5	 digestData
+1 2 840 113549 1 7 6	 encryptedData
+
+# pkcs-1
+1 2 840 113549 2 	 	digestAlgorithm
+1 2 840 113549 2 2	 	md2
+1 2 840 113549 2 4   	md4
+1 2 840 113549 2 5	 	md5
+
+# rfc2040
+1 2 840 113549 3  	 	 encryptionAlgorithm
+1 2 840 113549 3 8  	 RC5CBC
+1 2 840 113549 3 9  	 RC5CBCPAD
+
+# rfc2144
+1 2 840 113533           nt 
+1 2 840 113533 7         nsn
+1 2 840 113533 7 66      algorithms
+1 2 840 113533 7 66  10  cast5CBC
+1 2 840 113533 7 66  11  cast5MAC
+1 2 840 113533 7 66  12  pbeWithMD5AndCAST5-CBC
+
+# pkcs-5
+1 2 840 113549 1 5       pkcs-5
+1 2 840 113549 1 5 1     pbeWithMD2AndDES-CBC
+1 2 840 113549 1 5 3     pbeWithMD5AndDES-CBC
+
+# pkcs-12
+1 2 840 113549 1 12      pkcs-12
+1 2 840 113549 1 12 1    pkcs-12PbeIds
+1 2 840 113549 1 12 1 1  pbeWithSHA1And128BitRC4   
+1 2 840 113549 1 12 1 2  pbeWithSHA1And40BitRC4   
+1 2 840 113549 1 12 1 3  pbeWithSHA1And3-KeyTripleDES-CBC     
+1 2 840 113549 1 12 1 4  pbeWithSHA1And2-KeyTripleDES-CBC     
+1 2 840 113549 1 12 1 5  pbeWithSHA1And128BitRC2-CBC     
+1 2 840 113549 1 12 1 6  pbeWithSHA1And40BitRC2-CBC     
+
+# rfc2268
+1 2 840 113549 3 2       rc2CBC
+
+# x509
+2 5                      ds
+2 5 4                    at
+2 5 8                    algorithm
+2 5 8 1                  encryptionAlgorithm
+2 5 8 2                  hashAlgorithm
+2 5 8 3                  signatureAlgorithm
+2 5 8 1 1                rsa
+
+# draft-ietf-pkix-ipki-part1 (11)
+2 5 4 3                  commonName
+2 5 4 4                  surname
+2 5 4 6                  countryName
+2 5 4 7                  localityName
+2 5 4 8                  stateOrProvinceName
+2 5 4 10                 organizationName
+2 5 4 11                 organizationalUnitName
+2 5 4 12                 title
+2 5 4 41                 name
+2 5 4 42                 givenName
+2 5 4 43                 initials
+2 5 4 44                 generationQualifier
+2 5 4 46                 dnQualifier
+
+# set secure xaction specs book 3 may 31 19997
+1 3                        identified-organization
+1 3 14                     oiw
+1 3 14 3                   secsig
+1 3 14 3 2                 algorithm
+1 3 14 3 2 26              sha1
+1 3 14 3 2 7               desCBC
+1 2 840 113549 3 10        desCDMF
+
+# deprecated ?
+# stable implementation agreements... (1991)
+1 3 14 7 2 3 1             md2WithRsa
+1 3 14 7 2 1 1             elGamal
+1 3 14 7 2 3 2             md2WithElGamal
+
+# rfc 2311
+1 2 840 113549 3 2       RC2-CBC
+1 2 840 113549 3 7       DES-EDE3-CBC
+1 2 840 113549 2 5       md5
+1 3 14 3 2 26            sha-1 
+1 2 840 113549 1 1 1     rsaEncryption
+2 5 8                    algorithm
+2 5 8 1                  encryptionAlgorithm
+2 5 8 1 1                rsa
+
+# draft-ietf-smime-msg-06.txt
+1 2 40 10040             x9-57
+1 2 40 10040 4           x9cm
+1 2 40 10040 4 1         dsa
+
+# netscape cert extensions communicator 4.0, draft 8/13/97
+2 16 840 1 113730       netscape
+2 16 840 1 113730 1     netscape-cert-extension
+2 16 840 1 113730 1 1   netscape-cert-extension-type
+2 16 840 1 113730 1 2   netscape-base-url
+2 16 840 1 113730 1 3   netscape-revocation-url
+2 16 840 1 113730 1 4   netscape-ca-revocation-url
+2 16 840 1 113730 1 7   netcape-cert-renewal-url
+2 16 840 1 113730 1 8   netscape-policy-url
+2 16 840 1 113730 1 12  netscape-ssl-server-name
+2 16 840 1 11330  1 13  netscape-comment
+2 16 840 1 113730 2     netscape-data-type
+2 16 840 1 113730 2 5   netscape-cert-sequence
+
+# x509 1997 (!) draft
+2 5 4 35            userPassword
+2 5 4 36            userCertificate
+2 5 4 37            cAcertificate
+2 5 4 38            authorityRecovationList
+2 5 4 39            certificateRevocationList
+2 5 4 40            crossCertificatePair
+2 5 4 58            attributeCertificate
+
+2 5 29              ce
+2 5 29 9            subjectDirectoryAttributes
+2 5 29 14           subjectKeyIdentifier
+2 5 29 15           keyUsage
+2 5 29 16           privateKeyUsagePeriod
+2 5 29 17           subjectAltName
+2 5 29 18           issuerAltName
+2 5 29 19           basicConstraints
+2 5 29 20           cRLNumber
+2 5 29 21           reasonCode
+2 5 29 23           instructionCode
+2 5 29 24           invalidityDate
+2 5 29 27           deltaCRLIndicator
+2 5 29 28           issuingDistributionPoint
+2 5 29 29           certificateIssuer
+2 5 29 30           nameConstraints
+2 5 29 31           cRLDistributionPoints
+2 5 29 32           certificatePolicies
+2 5 29 33           policyMappings
+2 5 29 35           authorityKeyIdentifier
+2 5 29 36           policyConstraints
+2 5 29 37           extKeyUsage
+
+# bosselae's page on ripemd-160
+1 3 36              teletrust
+1 3 36 3            algorithm
+1 3 36 3 2          hashAlgorithm
+1 3 36 3 2 1        ripemd160
+1 3 36 3 2 2        ripemd128
+1 3 36 3 2 3        ripemd256
+1 3 36 3 3          signatureAlgorithm
+1 3 36 3 3 1        rsaSignature    
+1 3 36 3 3 1 2      rsaSignatureWithripemd160
+1 3 36 3 3 1 3      rsaSignatureWithripemd128
+1 3 36 3 3 1 4      rsaSignatureWithripemd256
+
+# a teletrust document 'crypto algs: overview and object identifiers (11/27/96)
+# because I can't get to the stupid one at nemo.ncls.nist.gov
+
+1 3 14 3 2 2        md4WithRSA
+1 3 14 3 2 3        md5WithRSA
+1 3 14 3 2 4        md5WithRSAEncryption
+1 3 14 3 2 6        desECB
+1 3 14 3 2 7        desCBC
+1 3 14 3 2 8        desOFB
+1 3 14 3 2 9        desCFB
+1 3 14 3 2 10        desMAC
+1 3 14 3 2 11        RSASignature
+1 3 14 3 2 12        DSA
+1 3 14 3 2 13        DSAWithSHA
+1 3 14 3 2 14        RSAWithmdc2
+1 3 14 3 2 15        RSAWithSHA
+1 3 14 3 2 16        dhWithCommonModulus
+1 3 14 3 2 17        desEDE
+1 3 14 3 2 18        SHA
+1 3 14 3 2 19        mdc-2
+1 3 14 3 2 20        DSACommon
+1 3 14 3 2 21        DSACommonWithSHA
+1 3 14 3 2 22        RSAKeyTransport
+1 3 14 3 2 23        Keyed-hash-seal
+1 3 14 3 2 24        md2WithRSASignature
+1 3 14 3 2 25        md5WithRSASignature
+1 3 14 3 2 26        SHA1
+1 3 14 3 2 27        DSAWithSHA1
+1 3 14 3 2 28        DSACommonWithSHA1
+1 3 14 3 2 29        RSASignatureWithSHA1
