@@ -20,19 +20,21 @@ To find some .keystores you can use Google Dorks like this:
 Usage
 -----
 ```
-Usage: keystorebrute.py [options] arg1 arg2
+Usage: keystorebrute.py [options]
 
 Options:
   -h, --help            show this help message and exit
-  -v, --verbose         Show password being tested [default: False]
   -k FILE, --keystore=FILE
                         Keystore to crack
-  -D, --dump-store      If specified, the keystore information will be dumped
-                        in the terminal
   -K FILE, --keystore-list=FILE
                         A file with a list of keystores to crack
+  -P, --print-dumps     If specified, the keystore information will be dumped
+                        in the terminal
+  -S, --save-dumps      Save dumps of the data to the output folder [default:
+                        False]
   -d DICTIONARY, --dictionary=DICTIONARY
                         Dictionary to use in the brute force
+  -v, --verbose         Show password being tested [default: False]
 ```
 
 Output Example
