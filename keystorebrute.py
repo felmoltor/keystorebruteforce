@@ -26,13 +26,6 @@ VERSION="1.2"
 OUTPUTDIR="./output" 
 CURRENTOUT="%s/%s" % (OUTPUTDIR,str(int(datetime.datetime.now().strftime("%s")) * 1000))
 
-def printPercent(prefix="Progress: ", iteration=0.0, total=100.0, decimals=1, length=100, suffix="Complete", fill='█'):
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-    filledLength = int(length * iteration // total)
-    bar = fill * filledLength + '-' * (length - filledLength)
-    sys.stdout.write('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix))
-    sys.stdout.flush()
-
 def printBanner():
     print colored("======================================","blue","on_white")
     print colored("=      Keystore Brute Force v%s     =" % VERSION,"blue","on_white")
@@ -64,7 +57,6 @@ def save_pem(data, data_type, path):
     keystr += '\r\n'
     keystr += '-----END %s-----' % data_type
     f.write(keystr)
-    
         
 def dumpInfo(ksname, data, data_type):
     # Print in the terminal
@@ -86,9 +78,73 @@ def dumpInfo(ksname, data, data_type):
         save_pem(data, data_type, savepath)
         print colored("Dumped %s of JKS file %s on path '%s'" % (data_type,ksname,savepath), "blue")
 
+def printStatus(prefix="Progress: ", iteration=0.0, total=100.0, decimals=1, length=80, suffix="Complete", fill='█',start=0,recalculateETA=False,lastseta="?pps, ETA: ?"):
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    # Every 1% of increase in the progress bar, calculate the ETA (avoid calculate on each iteration)
+    seta = '?pps, ETA: ?'
+    if recalculateETA:
+        seta = getSpeedAdnETA(start,iteration,total)
+    else:
+        seta = lastseta 
+        
+    if options.verbose:
+        # Print the password we are testing now
+        bar = ('%s |%s| %s%% %s [%s]' % (prefix, bar, percent, suffix, seta))
+    else:
+        # Print only percentage and ETA
+        bar = ('%s |%s| %s%% [%s]' % (prefix, bar, percent, seta))
+    
+    sys.stdout.write('\r%s' % bar)
+    sys.stdout.flush()
+    
+    return seta
+
+def getSpeedAdnETA(start,iteration,total):
+    seconds_in_day = 86400
+    seconds_in_hour = 3600
+    seconds_in_minute = 60
+    seta = ""
+    secleft = 0
+    minsleft = 0
+    hoursleft = 0
+    daysleft = 0
+    
+    currentepoch = int(datetime.datetime.now().strftime("%s"))
+    runningsecs = (currentepoch - start)
+    if (runningsecs > 0):
+        passpersec = round((float(iteration)/float(runningsecs)),1)
+        secleft = round(((total - iteration)/passpersec),1)
+        # Change to days minutes and hours left
+        eta = ""
+        resto = secleft
+        if resto > seconds_in_day:
+            daysleft = int(resto/seconds_in_day)
+            resto = resto%seconds_in_day
+            eta += "%sd" % daysleft
+        if resto > seconds_in_hour:
+            hoursleft = int(resto/seconds_in_hour)
+            resto = resto%seconds_in_hour
+            eta += "%sh" % hoursleft
+        if resto > seconds_in_minute:
+            minsleft = int(resto/seconds_in_minute)
+            resto = resto%seconds_in_minute
+            eta += "%sm" % minsleft
+            
+        eta += "%ss" % int(resto)
+        
+        seta = '%spps, ETA: %s' % (passpersec,eta)
+    else:
+        seta = '?pps, ETA: ?'
+    return seta
+        
+
 def dictionaryAttack(kspath,dictionary):
     foundpwd=False
     NotValidFile=False
+    startepoch = int(datetime.datetime.now().strftime("%s"))
+    
     df = open(dictionary,"r")
     msg="= Brute forcing keystore file '%s' =" % kspath
     print colored("="*len(msg),"cyan")
@@ -96,11 +152,20 @@ def dictionaryAttack(kspath,dictionary):
     print colored("="*len(msg),"cyan")
     dictines = df.readlines()
     npassw=len(dictines)
-    cpassw=0    
+    cpassw=0
+    lseta = "?pps, ETA: ?" 
+    
     for passw in dictines:
         cpassw+=1
         passw=passw.strip()
-        printPercent(iteration=cpassw, total=npassw, suffix="Testing %s" % passw)
+        # If current password number is module of 1% increase on the percentage bar, recalculate the ETA
+        reta = False
+        if ((cpassw%int((npassw*0.01))) == 0):
+            reta = True
+        
+        nseta = printStatus(iteration=cpassw, total=npassw, suffix="Testing %s" % passw,start=startepoch,recalculateETA=reta,lastseta=lseta)
+        lseta = nseta
+        
         try:
             ks = jks.KeyStore.load(kspath, passw, try_decrypt_keys=True)
             sys.stdout.write("\n [+] Valid password found: ")
